@@ -192,3 +192,63 @@ export async function authenticateUser(email: string, password: string): Promise
 
   return { user, token }
 }
+
+// Create user from OAuth provider
+export async function createOAuthUser(userData: {
+  email: string
+  firstName: string
+  lastName: string
+}): Promise<User> {
+  const { email, firstName, lastName } = userData;
+
+  const { data, error } = await supabaseAdmin
+    .from('users')
+    .insert({
+      email: email.toLowerCase(),
+      password_hash: null, // No password for OAuth users
+      first_name: firstName,
+      last_name: lastName,
+      email_verified: true, // Email is verified by Google
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return {
+    id: data.id,
+    email: data.email,
+    firstName: data.first_name,
+    lastName: data.last_name,
+    phone: data.phone,
+    emailVerified: data.email_verified,
+    createdAt: data.created_at,
+    lastLogin: data.last_login,
+  };
+}
+
+// Find user by email or create a new one from OAuth
+export async function findOrCreateUser(oauthData: {
+  email: string
+  firstName: string
+  lastName: string
+}): Promise<User> {
+  const existingUser = await getUserByEmail(oauthData.email);
+
+  if (existingUser) {
+    // Optional: Update user's name from Google profile if it has changed
+    // For now, we'll just return the existing user
+    return existingUser;
+  }
+
+  // If user doesn't exist, create a new one
+  const newUser = await createOAuthUser({
+    email: oauthData.email,
+    firstName: oauthData.firstName,
+    lastName: oauthData.lastName,
+  });
+
+  return newUser;
+}
