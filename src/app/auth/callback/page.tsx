@@ -1,61 +1,40 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function AuthCallback() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [status, setStatus] = useState("Processing...")
+export default function AuthCallbackPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const code = searchParams.get("code")
-    const error = searchParams.get("error")
+    const token = searchParams.get('token');
+    const error = searchParams.get('error');
 
-    if (error) {
-      setStatus("Authentication failed. Please try again.")
-      setTimeout(() => {
-        router.push("/login")
-      }, 3000)
-      return
-    }
-
-    if (code) {
-      // In a real app, you would send this code to your backend
-      // to exchange it for access tokens
-      console.log("Authorization code received:", code)
+    if (token) {
+      // Save the token to localStorage
+      localStorage.setItem('auth_token', token);
       
-      // Simulate processing
-      setStatus("Authentication successful! Redirecting...")
-      
-      setTimeout(() => {
-        // Redirect to dashboard or home page
-        router.push("/")
-      }, 2000)
+      // Redirect to the home page. The AuthProvider will pick up the token
+      // and update the user state.
+      router.push('/');
+    } else if (error) {
+      // Handle potential errors passed from the server
+      console.error('OAuth Error:', error);
+      router.push(`/login?error=${encodeURIComponent(error)}`);
     } else {
-      setStatus("No authorization code received. Redirecting...")
-      setTimeout(() => {
-        router.push("/login")
-      }, 3000)
+      // No token or error, redirect to login
+      router.push('/login?error=Invalid_callback');
     }
-  }, [searchParams, router])
+  }, [router, searchParams]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="text-center space-y-6">
-        <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto">
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-gray-900">Authentication</h1>
-          <p className="text-gray-600">{status}</p>
-        </div>
-
-        <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+        <h1 className="text-2xl font-semibold text-gray-700 mt-4">ورود شما در حال نهایی شدن است</h1>
+        <p className="text-gray-500 mt-2">لطفا منتظر بمانید...</p>
       </div>
     </div>
-  )
-} 
+  );
+}
