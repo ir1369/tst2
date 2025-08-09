@@ -32,7 +32,7 @@ export function RecentActivities({ activities }: RecentActivitiesProps) {
               </div>
               <div className="flex-1">
                 <p className="text-sm text-gray-900">
-                  {activity.action} <span className="text-emerald-600">"{activity.item}"</span>
+                  {activity.action} <span className="text-emerald-600">&quot;{activity.item}&quot;</span>
                 </p>
                 <p className="text-xs text-gray-500">{activity.course} • {activity.time}</p>
               </div>

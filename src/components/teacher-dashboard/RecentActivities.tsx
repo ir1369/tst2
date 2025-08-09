@@ -28,7 +28,7 @@ export function RecentActivities({ activities }: RecentActivitiesProps) {
               <div className="flex-1">
                 <p className="text-sm text-gray-900">
                   <span className="font-medium">{activity.user}</span> {activity.action}{' '}
-                  <span className="text-emerald-600">"{activity.item}"</span>
+                  <span className="text-emerald-600">&quot;{activity.item}&quot;</span>
                 </p>
                 <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
               </div>

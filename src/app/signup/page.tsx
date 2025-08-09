@@ -365,7 +365,7 @@ export default function SignUpPage() {
 
           {/* Testimonial */}
           <div className="mb-12">
-            <div className="text-6xl text-emerald-300 mb-4">"</div>
+            <div className="text-6xl text-emerald-300 mb-4">&quot;</div>
             <blockquote className="text-xl leading-relaxed mb-6">
               آکادمی دانش مسیر یادگیری من را کاملاً متحول کرد. دوره‌های با کیفیت و اساتید متخصص باعث شدند که بتوانم مهارت‌های جدید را به سرعت یاد بگیرم.
             </blockquote>

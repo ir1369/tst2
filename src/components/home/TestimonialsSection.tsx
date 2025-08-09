@@ -38,7 +38,7 @@ export function TestimonialsSection() {
                 ))}
               </div>
               <blockquote className="text-gray-700 mb-6 leading-relaxed">
-                "دوره‌ها عالی و کاربردی هستند. پشتیبانی و کیفیت تدریس بسیار خوب است."
+                &quot;دوره‌ها عالی و کاربردی هستند. پشتیبانی و کیفیت تدریس بسیار خوب است.&quot;
               </blockquote>
               <div className="flex items-center">
                 <img
